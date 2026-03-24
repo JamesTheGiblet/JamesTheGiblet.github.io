@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCE Docs · Technical Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- Markdown Parser -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+  :root {
+    --black: #050508;
+    --deep: #0a0a12;
+    --card: #0f0f1a;
+    --border: #1a1a2e;
+    --gold: #c8a84b;
+    --dim: #444466;
+    --mid: #778899;
+    --text: #c8ccd8;
+    --white: #f0f2f8;
+    --green: #22c55e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.7;
+  }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  aside {
+    background: var(--deep);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem; color: var(--gold);
+    text-decoration: none; margin-bottom: 24px;
+    display: block; letter-spacing: 2px;
+  }
+
+  .doc-group {
+    margin-bottom: 24px;
+  }
+
+  .doc-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem; text-transform: uppercase;
+    color: var(--dim); letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+
+  .doc-link {
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem; color: var(--mid);
+    text-decoration: none; margin-bottom: 8px;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .doc-link:hover { color: var(--gold); }
+  .doc-link.active { color: var(--white); font-weight: 700; border-left: 2px solid var(--gold); padding-left: 10px; margin-left: -12px; }
+
+  /* ── CONTENT ── */
+  main {
+    padding: 60px 80px;
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* Markdown Styles */
+  .markdown-body h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem; color: var(--white);
+    line-height: 1; margin-bottom: 24px;
+    border-bottom: 1px solid var(--border); padding-bottom: 16px;
+  }
+  .markdown-body h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem; color: var(--white);
+    margin: 48px 0 24px;
+  }
+  .markdown-body h3 {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem; color: var(--gold);
+    margin: 32px 0 16px;
+  }
+  .markdown-body p { margin-bottom: 16px; font-size: 1rem; color: var(--text); }
+  .markdown-body ul, .markdown-body ol { margin-bottom: 24px; padding-left: 24px; }
+  .markdown-body li { margin-bottom: 8px; }
+  .markdown-body code {
+    font-family: 'Space Mono', monospace;
+    background: rgba(255,255,255,0.05);
+    padding: 2px 6px; font-size: 0.85em; color: var(--gold);
+  }
+  .markdown-body pre {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 24px; margin: 24px 0;
+    overflow-x: auto;
+  }
+  .markdown-body pre code {
+    background: transparent; padding: 0; color: var(--text);
+  }
+  .markdown-body blockquote {
+    border-left: 3px solid var(--dim);
+    padding-left: 16px; color: var(--mid);
+    font-style: italic;
+  }
+
+  /* Loading State */
+  .loading {
+    color: var(--dim); font-family: 'Space Mono', monospace;
+    text-align: center; margin-top: 100px;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+
+  /* ── MOBILE ── */
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    aside { display: none; }
+    main { padding: 40px 24px; }
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <aside>
+    <a href="cce.html" class="brand">← CCE HOME</a>
+    <div class="doc-group">
+      <div class="doc-title">Platform & AI</div>
+      <a class="doc-link" onclick="loadDoc('CCE_AI_Framework.md')">AI Framework</a>
+      <a class="doc-link" onclick="loadDoc('CCE_CRYPTO_AI_REPORT.md')">AI Report</a>
+      <a class="doc-link" onclick="loadDoc('CCE_Pocket_Node_Deployment_Guide.md')">Deployment Guide</a>
+      <a class="doc-link" onclick="loadDoc('DASHBOARD_README.md')">Dashboard</a>
+    </div>
+    <div class="doc-group">
+      <div class="doc-title">Operations</div>
+      <a class="doc-link" onclick="loadDoc('DryRunGuide.md')">Dry Run Guide</a>
+      <a class="doc-link" onclick="loadDoc('EmergencyStop.md')">Emergency Stop</a>
+      <a class="doc-link" onclick="loadDoc('Troubleshooting_Dormant.md')">Troubleshooting</a>
+      <a class="doc-link" onclick="loadDoc('GlossaryOfStates.md')">Glossary of States</a>
+      <a class="doc-link" onclick="loadDoc('BACKTEST.md')">Backtesting</a>
+    </div>
+    <div class="doc-group">
+      <div class="doc-title">Meta & Templates</div>
+      <a class="doc-link" onclick="loadDoc('DOCS_BUNDLE.md')">Docs Bundle</a>
+      <a class="doc-link" onclick="loadDoc('ReleaseNotesTemplate.md')">Release Notes Tmpl</a>
+      <a class="doc-link" onclick="loadDoc('First24HoursEmail.md')">First 24h Email</a>
+      <a class="doc-link" onclick="loadDoc('NurtureEmails.md')">Nurture Emails</a>
+    </div>
+  </aside>
+
+  <main>
+    <div id="content" class="markdown-body">
+      <div style="text-align:center; padding: 100px 0;">
+        <h1 style="border:none; margin-bottom:16px;">DEVELOPER DOCS</h1>
+        <p style="color:var(--mid); font-family:'Space Mono', monospace;">Select a module from the sidebar to view its raw technical documentation.</p>
+        <div style="margin-top: 40px; padding: 24px; border: 1px solid var(--border); display:inline-block; text-align:left;">
+          <p style="font-size:0.8rem; margin-bottom:0;">Live Fetch from:</p>
+          <code style="color:var(--gold)">github.com/JamesTheGiblet/cce-crypto/tree/master/docs/</code>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // ⚠️ CONFIGURATION:
+  // 1. Ensure your repo has a /docs folder.
+  // 2. If your default branch is 'main', change 'master' to 'main' below.
+  const REPO_BASE = 'https://raw.githubusercontent.com/JamesTheGiblet/cce-crypto/master/docs/';
+  
+  async function loadDoc(filename) {
+    const contentDiv = document.getElementById('content');
+    const links = document.querySelectorAll('.doc-link');
+    
+    // Update active state
+    links.forEach(l => l.classList.remove('active'));
+    event.target.classList.add('active');
+
+    // Show loading
+    contentDiv.innerHTML = '<div class="loading">FETCHING DOCS FROM GITHUB...</div>';
+
+    try {
+      // Fetch raw markdown
+      const response = await fetch(REPO_BASE + filename);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const text = await response.text();
+      
+      // Fetch last updated timestamp
+      const lastUpdated = await fetchLastUpdated(filename);
+      let htmlContent = marked.parse(text);
+
+      if (lastUpdated) {
+        htmlContent = `
+          <div style="font-family:'Space Mono'; font-size:0.65rem; color:var(--gold); margin-bottom:32px; border-bottom:1px solid var(--border); padding-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+            <span>LAST UPDATED: ${lastUpdated}</span>
+            <span style="color:var(--dim)">SOURCE: GITHUB API</span>
+          </div>
+        ` + htmlContent;
+      }
+
+      // Parse and render
+      contentDiv.innerHTML = htmlContent;
+      
+      // Scroll to top
+      window.scrollTo(0, 0);
+
+    } catch (e) {
+      contentDiv.innerHTML = `
+        <div style="text-align:center; padding: 60px; color:var(--mid);">
+          <h2 style="font-family:'Space Mono'; font-size:1.2rem; color:var(--gold); border:none;">LOAD FAILED</h2>
+          <p>Could not fetch <code>${filename}</code>.</p>
+          <p style="font-size:0.75rem; color:var(--red); margin:12px 0; word-break:break-all; background:rgba(255,0,0,0.1); padding:8px;">
+            FAILED URL: ${REPO_BASE + filename}
+          </p>
+          <p style="font-size:0.8rem; margin-top:16px;">
+            1. Check that the file exists in the <code>/docs</code> folder.<br>
+            2. Check if your repo uses 'main' or 'master' branch.<br>
+            3. Verify your internet connection.
+          </p>
+          <a href="https://github.com/JamesTheGiblet/cce-crypto/tree/master/docs" target="_blank" 
+             style="color:var(--white); text-decoration:underline; font-family:'Space Mono'; font-size:0.8rem; margin-top:20px; display:inline-block;">
+             View directly on GitHub →
+          </a>
+        </div>
+      `;
+    }
+  }
+
+  async function fetchLastUpdated(filename) {
+    try {
+      const res = await fetch(`https://api.github.com/repos/JamesTheGiblet/cce-crypto/commits?path=docs/${filename}&page=1&per_page=1`);
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (data && data[0] && data[0].commit) {
+        const date = new Date(data[0].commit.committer.date);
+        return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+      }
+    } catch (e) { console.error(e); }
+    return null;
+  }
+
+  // Mobile handling (simplified)
+  if (window.innerWidth < 900) {
+    // Create a select dropdown for mobile nav
+    const select = document.createElement('select');
+    select.style.cssText = `
+      display: block; width: 100%; padding: 12px; margin-bottom: 32px;
+      background: var(--card); color: var(--gold); border: 1px solid var(--border);
+      font-family: 'Space Mono', monospace;
+    `;
+    
+    select.innerHTML = '<option value="">SELECT DOCUMENTATION...</option>';
+    document.querySelectorAll('.doc-link').forEach(link => {
+      const filename = link.getAttribute('onclick').match(/'([^']+)'/)[1];
+      const text = link.innerText;
+      select.innerHTML += `<option value="${filename}">${text}</option>`;
+    });
+
+    select.addEventListener('change', (e) => {
+      if(e.target.value) loadDoc(e.target.value);
+    });
+
+    document.querySelector('main').prepend(select);
+  }
+</script>
+</body>
+</html>

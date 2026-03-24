@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCE Handbook · The Blueprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #050508;
+    --deep: #0a0a12;
+    --card: #0f0f1a;
+    --border: #1a1a2e;
+    --gold: #c8a84b;
+    --dim: #444466;
+    --mid: #778899;
+    --text: #c8ccd8;
+    --white: #f0f2f8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.7;
+  }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  aside {
+    background: var(--deep);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem; color: var(--gold);
+    text-decoration: none; margin-bottom: 24px;
+    display: block; letter-spacing: 2px;
+  }
+
+  .toc-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem; text-transform: uppercase;
+    color: var(--dim); letter-spacing: 2px;
+    margin: 24px 0 12px;
+  }
+
+  .toc-link {
+    display: block;
+    font-size: 0.85rem; color: var(--mid);
+    text-decoration: none; margin-bottom: 8px;
+    transition: color 0.2s;
+  }
+  .toc-link:hover { color: var(--gold); }
+  .toc-link.active { color: var(--white); font-weight: 500; }
+
+  .btn-sidebar {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: var(--gold);
+    color: var(--black);
+    padding: 10px 16px;
+    text-decoration: none;
+    font-weight: 700;
+    display: block;
+    text-align: center;
+    margin-bottom: 32px;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(5,5,8,0.9);
+    backdrop-filter: blur(8px);
+    z-index: 2000;
+    display: flex; justify-content: center; align-items: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+  .modal-card {
+    background: var(--card);
+    border: 1px solid var(--gold);
+    padding: 40px;
+    max-width: 400px; width: 90%;
+    text-align: center;
+    transform: translateY(20px);
+    transition: transform 0.3s;
+    position: relative;
+    box-shadow: 0 0 40px rgba(200,168,75,0.15);
+  }
+  .modal-overlay.active .modal-card { transform: translateY(0); }
+
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem; color: var(--gold);
+    margin-bottom: 16px; letter-spacing: 2px;
+  }
+  .modal-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem; color: var(--mid);
+    margin-bottom: 32px;
+  }
+  .modal-close {
+    position: absolute; top: 16px; right: 16px;
+    background: transparent; border: none;
+    color: var(--dim); cursor: pointer;
+    font-size: 1.2rem;
+  }
+  .modal-close:hover { color: var(--white); }
+  
+  .btn-secondary {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 14px 28px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, box-shadow 0.2s;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .btn-secondary:hover {
+    background: rgba(200,168,75,0.1);
+    box-shadow: 0 0 20px rgba(200,168,75,0.2);
+  }
+
+  /* ── CONTENT ── */
+  main {
+    padding: 60px 80px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem; color: var(--white);
+    line-height: 1; margin-bottom: 24px;
+    letter-spacing: 2px;
+  }
+  
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem; color: var(--white);
+    margin: 60px 0 24px; border-bottom: 1px solid var(--border);
+    padding-bottom: 12px; letter-spacing: 1px;
+  }
+
+  h3 {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem; color: var(--gold);
+    margin: 40px 0 16px;
+  }
+
+  p { margin-bottom: 20px; font-size: 1.05rem; }
+  ul { margin-bottom: 24px; padding-left: 20px; }
+  li { margin-bottom: 8px; color: var(--mid); }
+  
+  .meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; color: var(--dim);
+    border-top: 1px solid var(--border);
+    margin-top: 80px; padding-top: 24px;
+  }
+
+  .foreword-box {
+    background: rgba(200,168,75,0.03);
+    border: 1px solid var(--border);
+    padding: 32px; margin-bottom: 40px;
+  }
+
+  blockquote {
+    border-left: 3px solid var(--gold);
+    padding-left: 20px; margin: 30px 0;
+    font-style: italic; color: var(--white);
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    aside { display: none; } /* Simplified for mobile, ideally would be a drawer */
+    main { padding: 40px 24px; }
+  }
+  
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <aside>
+    <a href="cce.html" class="brand">← CCE HOME</a>
+    <a href="javascript:void(0)" onclick="openModal()" class="btn-sidebar">Buy PDF (£29)</a>
+    <a href="https://github.com/JamesTheGiblet/cce-crypto/tree/master/docs" target="_blank" class="btn-sidebar" style="background:transparent; border:1px solid var(--gold); color:var(--gold); margin-top:-16px;">Repo Docs</a>
+    
+    <div class="toc-title">Front Matter</div>
+    <a href="#foreword" class="toc-link">Foreword</a>
+    <a href="#about" class="toc-link">About This Handbook</a>
+
+    <div class="toc-title">Part One: Philosophy</div>
+    <a href="#pillars" class="toc-link">1. The Three Pillars</a>
+    <a href="#cascade" class="toc-link">2. The Cascade Principle</a>
+    <a href="#typology" class="toc-link">3. Engine Typology</a>
+    <a href="#intel" class="toc-link">4. Intelligence Layer</a>
+    <a href="#sovereignty" class="toc-link">5. Local-First Sovereignty</a>
+
+    <div class="toc-title">Part Two: Strategic</div>
+    <a href="#se-crypto" class="toc-link">6. S.E Crypto</a>
+    <a href="#se-forex" class="toc-link">7. S.E Forex</a>
+    <a href="#se-reit" class="toc-link">8. S.E REIT</a>
+    <a href="#se-stocks" class="toc-link">9. S.E Stocks</a>
+    <a href="#se-como" class="toc-link">10. S.E Commodities</a>
+    <a href="#se-egp" class="toc-link">11. S.E EGP</a>
+
+    <div class="toc-title">Part Three: Tactical</div>
+    <a href="#te-grid" class="toc-link">12. T.E Grid</a>
+    <a href="#te-mom" class="toc-link">13. T.E Momentum</a>
+    <a href="#te-brk" class="toc-link">14. T.E Breakout</a>
+    <a href="#te-lce" class="toc-link">15. T.E LCE</a>
+
+    <div class="toc-title">Part Four: Observer</div>
+    <a href="#oe-obs" class="toc-link">16. O.E Observer</a>
+    <a href="#oe-sen" class="toc-link">17. O.E Sentinel</a>
+    <a href="#oe-str" class="toc-link">18. O.E Strategist</a>
+
+    <div class="toc-title">Part Five: Architecture</div>
+    <a href="#runtime" class="toc-link">19. Runtime & PM2</a>
+    <a href="#fsm" class="toc-link">20. State Machines</a>
+    <a href="#storage" class="toc-link">21. Data Storage</a>
+    <a href="#dash" class="toc-link">22. Dashboard</a>
+    <a href="#safety" class="toc-link">23. Safety Systems</a>
+  </aside>
+
+  <main>
+    <h1 style="font-size: 5rem;">THE HANDBOOK</h1>
+    <p style="font-family: 'Space Mono', monospace; color: var(--gold); letter-spacing: 2px;">PHILOSOPHY · ARCHITECTURE · ENGINES</p>
+    <p style="font-size: 0.8rem; color: var(--dim);">Version 1.0 · Giblets Creations · March 2026</p>
+
+    <div id="foreword" class="foreword-box">
+      <h3>Foreword</h3>
+      <p>I built CCE in three weeks on a phone.</p>
+      <p>That sentence sounds like a boast. It isn't. It's a statement of constraint — and of what constraint produces when you refuse to let it be an excuse.</p>
+      <p>I didn't have a trading desk. I didn't have a quant team, a Bloomberg terminal, or a cloud budget. I had a Samsung S24 Ultra, Termux, a Node.js runtime, and a set of principles I'd been refining for years across entirely different domains.</p>
+      <p>The principles came first. They always do. I've applied the same thinking to 3D printing, robotics, embedded systems, and IoT. The domain changes. The underlying pattern doesn't: understand the environment, define the states, build the transitions, test everything, never override the system.</p>
+      <p>This handbook documents the philosophy behind every design decision, the architecture that ties everything together, and each of the eleven engines that comprise the platform. It does not document the proprietary signal logic — the specific thresholds and weights that constitute the edge. That is the one thing that stays closed.</p>
+      <p>Everything else is here.</p>
+      <p><strong>James Gilbert</strong><br>Giblets Creations</p>
+    </div>
+
+    <section id="about">
+      <h2>About This Handbook</h2>
+      <p>This handbook is the complete documentation of the Cascade Compounding Engine (CCE) — its philosophy, architecture, and the eleven engines that comprise the platform.</p>
+      <p>CCE is not a trading bot. It is an autonomous trading operating system built entirely on a mobile device. Eleven independent engines run across three ecosystems, coordinated by an intelligence layer that watches, alerts, and analyses. All of it runs on a Samsung S24 Ultra, managed by PM2, with no cloud dependency and no third-party custody.</p>
+
+      <div style="margin-top: 32px; padding: 24px; border: 1px solid var(--border); background: rgba(255,255,255,0.02);">
+        <h3 style="margin-top:0; font-size: 0.9rem; color: var(--mid);">DEVELOPER DOCUMENTATION</h3>
+        <p style="font-size: 0.9rem; margin-bottom: 16px;">
+          This handbook serves as the strategic blueprint. For implementation details, signal logic references, and raw engineering notes for every aspect of the program, refer to the technical documentation hosted in the repository.
+        </p>
+        <a href="https://github.com/JamesTheGiblet/cce-crypto/tree/master/docs" target="_blank" class="btn-secondary" style="display:inline-block; font-size:0.6rem; padding: 10px 20px;">Browse /docs on GitHub</a>
+      </div>
+    </section>
+
+    <!-- PART ONE -->
+    <h2 id="pillars">1. The Three Pillars</h2>
+    <p>CCE is built on three foundational principles that govern every line of code, every state transition, and every design decision. These pillars are not aspirational. They are enforced.</p>
+    
+    <h3>1.1 Environment First, Action Second</h3>
+    <p>Most trading systems ask: "Where is price going?" This is the wrong question. Price prediction is a game with no winners over the long term. CCE asks a different question: "What is the environment?"</p>
+    <p>The environment — volatility, sentiment, trend structure, macro conditions — determines whether any action is appropriate. In a hostile environment, the correct action is inaction. In a favourable environment, the correct action is deployment.</p>
+
+    <h3>1.2 No Prediction. No Emotion. No Exceptions.</h3>
+    <p>CCE does not predict. It observes, filters, and responds. Prediction is opinion. Opinion is emotion. Emotion loses money.</p>
+    <p>The system has no opinion on whether Bitcoin will go up or down. It has conditions. When conditions are met, it acts. When conditions are not met, it does not act. There is no grey area. There is no discretionary override.</p>
+
+    <h3>1.3 Transparency by Default</h3>
+    <p>A trading system you cannot understand is a system you cannot trust. Every engine's logic is documented. Every state transition is logged. Every market condition that influenced a decision is recorded. The architecture is public. The philosophy is public.</p>
+
+    <h2 id="cascade">2. The Cascade Principle</h2>
+    <p>The name 'Cascade Compounding Engine' encodes the system's core operational principle. There are two interlocking dimensions to the cascade: cascade as structure, and cascade as compounding.</p>
+    <p>Every engine in CCE is structured as a sequential cascade of states. Entry to later states requires confirmation at each earlier stage. No engine skips states. No engine jumps from resting to maximum deployment on a single signal.</p>
+
+    <h2 id="typology">3. Engine Typology</h2>
+    <h3>3.1 Strategic Engines — Weather Vanes</h3>
+    <p>Strategic engines are patient. They wait for macro conditions to align before deploying capital. They do not care about 5-minute price moves. They care about 4-hour, daily, and weekly structure.</p>
+    
+    <h3>3.2 Tactical Engines — Waterwheels</h3>
+    <p>Tactical engines are active. They harvest opportunity continuously, regardless of macro environment. They operate on shorter timeframes and rely on mechanical, repeatable patterns.</p>
+    
+    <h3>3.3 Observer Engines — Memory</h3>
+    <p>Observer engines are passive. They do not trade. They watch, record, and alert. They are the platform's intelligence layer.</p>
+
+    <h2 id="intel">4. The Intelligence Layer</h2>
+    <p>CCE's intelligence layer is a three-stage pipeline that transforms raw observations into actionable intelligence. A fourth stage — G.O Orchestrator — is planned for a future phase.</p>
+    <ul>
+      <li><strong>O.E Observer:</strong> Runs every 15 minutes. Takes a snapshot of all states. Builds the dataset.</li>
+      <li><strong>O.E Sentinel:</strong> Runs every 15 minutes. Detects anomalies and sends alerts.</li>
+      <li><strong>O.E Strategist:</strong> Runs every hour. Analyses patterns and recommends allocation.</li>
+    </ul>
+
+    <h2 id="sovereignty">5. Local-First Sovereignty</h2>
+    <p>CCE runs locally. Your API keys never leave your device. The system is yours. No third party can take it down, change its behaviour, or access your funds. This is not merely a technical choice — it is a philosophy.</p>
+
+    <!-- PART TWO -->
+    <h2 id="se-crypto">6. S.E Crypto</h2>
+    <p><strong>Status:</strong> 🟢 Live | <strong>Cycle:</strong> 4 Hours</p>
+    <p>S.E Crypto is the flagship engine. It monitors the cryptocurrency market and deploys capital through a sequence of states that correspond to phases of the crypto market cycle. In extreme fear environments (Fear & Greed below 20), S.E Crypto holds cash. Not because it predicts further decline — because the environment does not support deployment.</p>
+
+    <h2 id="se-forex">7. S.E Forex</h2>
+    <p><strong>Status:</strong> 🔵 Dry Run | <strong>Cycle:</strong> 1 Hour</p>
+    <p>S.E Forex is a mean-reversion engine. It waits for price to reach statistical extremes during liquid sessions. It does not act during off-hours or in low-volatility drifts.</p>
+
+    <h2 id="se-reit">8. S.E REIT</h2>
+    <p><strong>Status:</strong> 🔵 Dry Run | <strong>Cycle:</strong> 24 Hours</p>
+    <p>S.E REIT monitors the interest rate environment. It is built on the lag between Federal Reserve policy shifts and the repricing of Real Estate Investment Trusts.</p>
+
+    <h2 id="se-stocks">9. S.E Stocks</h2>
+    <p><strong>Status:</strong> 🔵 Dry Run | <strong>Cycle:</strong> 24 Hours</p>
+    <p>S.E Stocks is a volatility-aware engine. It refuses to deploy when VIX is elevated. It operates only in low-volatility trending regimes where the market rewards participation.</p>
+
+    <h2 id="se-como">10. S.E Commodities</h2>
+    <p><strong>Status:</strong> 🔵 Dry Run | <strong>Cycle:</strong> 24 Hours</p>
+    <p>A cross-asset confirmation engine. It requires a specific cascade sequence: Oil moves → Gold follows → Copper follows. If the sequence breaks, the engine retreats.</p>
+
+    <h2 id="se-egp">11. S.E EGP</h2>
+    <p><strong>Status:</strong> 🔴 Caution | <strong>Cycle:</strong> Weekly</p>
+    <p>A regime-based engine for the managed float of USD/EGP. It classifies policy into three regimes: Quiet Accumulation, Devaluation Surge, and Policy Divergence.</p>
+
+    <!-- PART THREE -->
+    <h2 id="te-grid">12. T.E Grid</h2>
+    <p><strong>Status:</strong> 🟢 Active | <strong>Cycle:</strong> 5 Min</p>
+    <p>Mechanical grid trading. It does not predict direction. It places orders above and below price and harvests volatility as BTC oscillates.</p>
+
+    <h2 id="te-mom">13. T.E Momentum</h2>
+    <p><strong>Status:</strong> 🔵 Dry Run | <strong>Cycle:</strong> 2 Hours</p>
+    <p>Captures confirmed directional moves on BTC/ETH/SOL. Requires EMA structure, RSI momentum, and Volume confirmation simultaneously.</p>
+
+    <h2 id="te-brk">14. T.E Breakout</h2>
+    <p><strong>Status:</strong> 🔵 Dry Run | <strong>Cycle:</strong> 1 Hour</p>
+    <p>Detects Bollinger Band squeezes (volatility compression) and enters on the subsequent high-volume expansion.</p>
+
+    <h2 id="te-lce">15. T.E LCE</h2>
+    <p><strong>Status:</strong> 🔵 Dry Run | <strong>Cycle:</strong> 5 Min</p>
+    <p>Liquidation Cascade Engine. Detects forced selling events via liquidation data and enters to ride the immediate continuation. "Other traders' pain is your signal."</p>
+
+    <!-- PART FOUR -->
+    <h2 id="oe-obs">16. O.E Observer</h2>
+    <p>The platform's memory. Runs every 15 minutes to snapshot all engine states and market conditions. Builds the dataset that powers the Strategist.</p>
+
+    <h2 id="oe-sen">17. O.E Sentinel</h2>
+    <p>The platform's immune system. Detects anomalies — broken correlations, engines stuck in states, policy divergence. Sends alerts but never trades.</p>
+
+    <h2 id="oe-str">18. O.E Strategist</h2>
+    <p>The analytical brain. Scans the Observer's dataset for patterns and generates allocation recommendations. Precursor to the future G.O (Grand Orchestrator).</p>
+
+    <!-- PART FIVE -->
+    <h2 id="runtime">19. Runtime & Process Management</h2>
+    <p>CCE runs on Node.js v22 within Termux on Android. PM2 manages the `cce-bot` (trading) and `dashboard` (web) processes, ensuring 24/7 uptime and auto-restart.</p>
+
+    <h2 id="fsm">20. State Machine Design</h2>
+    <p>Every engine is a Finite State Machine (FSM). This ensures deterministic behaviour. Given the same inputs, the engine always makes the same transition. No hidden logic.</p>
+
+    <h2 id="storage">21. Data Storage</h2>
+    <p>Uses `sql.js` for pure JavaScript SQLite. Each engine has its own isolated database file, preventing corruption in one engine from affecting others.</p>
+
+    <h2 id="dash">22. Dashboard & Interfaces</h2>
+    <p>A local web dashboard (`localhost:3000`) provides real-time state visualization. 'Forge HQ' is the PWA version for mobile home screens.</p>
+
+    <h2 id="safety">23. Safety Systems</h2>
+    <ul>
+      <li><strong>Pre-Flight Tests:</strong> 31 checks run on every boot. If one fails, the platform will not start.</li>
+      <li><strong>Circuit Breakers:</strong> Daily loss limits stop an engine from trading if it hits a drawdown threshold.</li>
+      <li><strong>Dry Run Default:</strong> All engines default to simulation mode. Live trading requires explicit configuration.</li>
+    </ul>
+
+    <div class="meta">
+      <p>CCE HANDBOOK v1.0 · GIBLETS CREATIONS · MARCH 2026</p>
+      <p>"I wanted it. So I forged it. Now forge yours."</p>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="pdfModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-title">COMING SOON</div>
+    <p class="modal-text">The CCE Handbook PDF edition is currently being finalized. Check back next week for the release.</p>
+    <button class="btn-secondary" onclick="closeModal()">CLOSE</button>
+  </div>
+</div>
+
+<script>
+  // Modal
+  function openModal() {
+    document.getElementById('pdfModal').classList.add('active');
+  }
+  function closeModal() {
+    document.getElementById('pdfModal').classList.remove('active');
+  }
+  document.getElementById('pdfModal').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('pdfModal')) closeModal();
+  });
+</script>
+</body>
+</html>
